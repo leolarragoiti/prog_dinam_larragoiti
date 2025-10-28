@@ -98,3 +98,104 @@ int main() {
     cout << "Gracias por jugar :)\n";
     return 0;
 }
+
+// =========================
+// FUNCIONES
+// =========================
+
+// Llena el tablero con espacios en blanco
+void initBoard(char board[3][3]) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            board[i][j] = ' ';
+        }
+    }
+}
+
+// Imprime el tablero bonito
+void printBoard(const char board[3][3]) {
+    cout << "\n   1   2   3\n";
+    for (int i = 0; i < 3; i++) {
+        cout << i + 1 << "  ";
+        for (int j = 0; j < 3; j++) {
+            cout << board[i][j];
+            if (j < 2) cout << " | ";
+        }
+        cout << "\n";
+        if (i < 2) cout << "  ---+---+---\n";
+    }
+    cout << "\n";
+}
+
+// Intenta colocar la ficha del jugador actual
+// Regresa true si se pudo colocar, false si fue inválido
+bool makeMove(char board[3][3], int row, int col, char player) {
+    // Validar rango
+    if (row < 0 || row > 2 || col < 0 || col > 2) {
+        return false;
+    }
+    // Validar que la casilla esté libre
+    if (board[row][col] != ' ') {
+        return false;
+    }
+    // Hacer la jugada
+    board[row][col] = player;
+    return true;
+}
+
+// Revisa si 'player' ganó
+bool checkWin(const char board[3][3], char player) {
+    // Revisar filas
+    for (int i = 0; i < 3; i++) {
+        if (board[i][0] == player &&
+            board[i][1] == player &&
+            board[i][2] == player) {
+            return true;
+        }
+    }
+
+    // Revisar columnas
+    for (int j = 0; j < 3; j++) {
+        if (board[0][j] == player &&
+            board[1][j] == player &&
+            board[2][j] == player) {
+            return true;
+        }
+    }
+
+    // Revisar diagonales
+    if (board[0][0] == player &&
+        board[1][1] == player &&
+        board[2][2] == player) {
+        return true;
+    }
+
+    if (board[0][2] == player &&
+        board[1][1] == player &&
+        board[2][0] == player) {
+        return true;
+    }
+
+    // Si nada anterior se cumplió, no ganó
+    return false;
+}
+
+// Revisa si el tablero está lleno y nadie ganó
+bool checkDraw(const char board[3][3]) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (board[i][j] == ' ') {
+                return false; // aún hay huecos, no es empate
+            }
+        }
+    }
+    return true; // no hay huecos -> empate
+}
+
+// Cambia 'X' <-> 'O'
+void switchPlayer(char &player) {
+    if (player == 'X')
+        player = 'O';
+    else
+        player = 'X';
+}
